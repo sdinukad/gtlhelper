@@ -2,13 +2,15 @@
 
 A modern, user-friendly desktop application designed to streamline tracking your Global Trade Link (GTL) activities in Pokemmo. Capture single or multiple GTL listings using an in-app region selection tool or from your clipboard, let Tesseract OCR extract the details, and save the structured data (Item Name, Price, Date) directly to your personal Google Sheet and/or a local CSV file.
 
-*Fig 1: GTL Helper - Normal Mode Interface*
+<details>
+   ![GTL Helper Screenshot - Normal Mode](placeholder_normal_mode.png) 
+   *Fig 1: GTL Helper - Normal Mode Interface*
+   
+   ![GTL Helper Screenshot - Mini Mode](placeholder_mini_mode.png) 
+   *Fig 2: GTL Helper - Compact Mini Mode*
 
-![GTL Helper Screenshot - Normal Mode](placeholder_normal_mode.png)
-
-*Fig 2: GTL Helper - Compact Mini Mode*
-
-![GTL Helper Screenshot - Mini Mode](placeholder_mini_mode.png) 
+   ![GTL Helper Demo](demo.gif)
+</details>
 
 
 ## Key Features
