@@ -64,8 +64,7 @@ Before you begin, ensure you have the following installed on your system:
 
 1.  **Download Application Files:**
     *   Download the main Python script (e.g., `gtlhelper.py`).
-    *   Create a folder named `icons` in the same directory as the script.
-    *   Place the required PNG icon files (see "Icon Setup" below) into this `icons` folder.
+    *   Download the `icons` in to the same directory as the script
 
 2.  **Install Python Dependencies:**
     *   Create a file named `requirements.txt` in the same directory as the script with the following content:
