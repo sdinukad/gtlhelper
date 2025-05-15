@@ -1,202 +1,202 @@
-# gtlhelper
-Capture listings on pokemmo gtl using ocr and update to a google sheet
-# Pokemmo GTL Helper
+# Pokemmo GTL OCR Helper
 
-A simple desktop application to help track listings from Pokemmo's Global Trade Link (GTL) by capturing screen regions or clipboard images, performing OCR, and saving the data to Google Sheets and/or a local CSV file.
+A modern, user-friendly desktop application designed to streamline tracking your Global Trade Link (GTL) activities in Pokemmo. Capture single or multiple GTL listings using an in-app region selection tool or from your clipboard, let Tesseract OCR extract the details, and save the structured data (Item Name, Price, Date) directly to your personal Google Sheet and/or a local CSV file.
 
-## Features
+![GTL Helper Screenshot - Normal Mode](placeholder_normal_mode.png) 
+*Fig 1: GTL Helper - Normal Mode Interface*
 
-*   Capture specific GTL listing lines using an in-app region selection tool.
-*   Process listing data from images copied to the clipboard (e.g., via Win+Shift+S).
-*   Uses Tesseract OCR to extract text from images.
-*   Parses OCR'd text to identify Item Name, Price, and Date.
-*   Saves structured data to:
-    *   Google Sheets (configurable)
-    *   Local CSV file (`gtl_listings.csv`) (configurable)
-*   Toggleable UI layout (horizontal/vertical).
-*   Always-on-top window for convenience.
+![GTL Helper Screenshot - Mini Mode](placeholder_mini_mode.png) 
+*Fig 2: GTL Helper - Compact Mini Mode*
+
+## Key Features
+
+*   **Flexible Data Capture:**
+    *   **In-App Region Selection:** Capture any part of your screen containing GTL listings (supports single or multiple lines).
+    *   **Clipboard Processing:** Instantly process images of GTL listings copied to your clipboard (e.g., via `Win+Shift+S`).
+*   **Accurate OCR & Parsing:**
+    *   Powered by Tesseract OCR for text extraction.
+    *   Intelligent parsing to structure OCR'd text into `Item Name`, `Price`, and `Date` (formatted as `dd/mm/yyyy`).
+    *   Designed to handle the common "Price -> Name -> (Optional Type) -> Date" GTL format.
+    *   Automatically processes both single and multiple listings from a region capture.
+    *   Attempts to filter out common headers or irrelevant lines.
+*   **Versatile Save Options:**
+    *   **Google Sheets Integration:** Securely save data to *your own* Google Sheet using OAuth 2.0 user authentication.
+    *   **Local CSV Export:** Save listings to a `gtl_listings.csv` file on your computer.
+    *   Both save options are toggleable via checkboxes in the settings.
+*   **Modern & Customizable UI:**
+    *   Built with `CustomTkinter` for a sleek, modern dark theme.
+    *   **Mini Mode:** Switch to an ultra-compact, icon-driven interface for minimal screen real estate usage.
+    *   **Collapsible Settings Panel:** Access save preferences and sheet configuration easily.
+    *   Always-on-top window functionality.
+    *   Clear visual preview of parsed data before saving.
+    *   Informative status bar for operational feedback.
+*   **Efficient & Responsive:**
+    *   Save operations to Google Sheets and CSV are performed in background threads to keep the UI snappy.
+    *   Optimized OCR calls for single-line (clipboard) vs. multi-line (region) captures.
 
 ## Prerequisites
 
-Before running this application, you will need:
+Before you begin, ensure you have the following installed on your system:
 
-1.  **Python 3.x:** Download from [python.org](https://www.python.org/). Make sure to check "Add Python to PATH" during installation.
+1.  **Python 3.7+:**
+    *   Download from [python.org](https://www.python.org/).
+    *   **Important for Windows users:** During installation, make sure to check the box that says **"Add Python to PATH"**.
 2.  **Tesseract OCR Engine:**
-    *   **Windows:** Download the installer from the [Tesseract at UB Mannheim page](https://github.com/UB-Mannheim/tesseract/wiki). During installation, ensure "English" language data is included. Note the installation path (e.g., `C:\Program Files\Tesseract-OCR`).
-    *   **macOS:** Use Homebrew: `brew install tesseract`
-    *   **Linux (Debian/Ubuntu):** `sudo apt update && sudo apt install tesseract-ocr`
-3.  **Google Cloud Project & Google Sheets API:**
-    *   You need a Google Cloud Platform (GCP) project.
-    *   The Google Sheets API must be enabled for this project.
-    *   You need to create Service Account credentials.
+    *   **Windows:**
+        *   Download the installer from the [Tesseract at UB Mannheim page](https://github.com/UB-Mannheim/tesseract/wiki).
+        *   During installation, ensure **"English" language data (`eng.traineddata`) is selected**.
+        *   The script attempts to find Tesseract in its default installation path (`C:\Program Files\Tesseract-OCR`). If you install it elsewhere, you may need to update `TESSERACT_CMD_PATH` at the top of the Python script.
+    *   **macOS:** The easiest way is via Homebrew: `brew install tesseract tesseract-lang`
+    *   **Linux (Debian/Ubuntu based):** `sudo apt update && sudo apt install tesseract-ocr tesseract-ocr-eng`
+3.  **A Google Account:** For saving data to Google Sheets.
 
 ## Setup Instructions
 
-1.  **Clone or Download this Repository:**
-    ```bash
-    # If using git
-    git clone <repository_url>
-    cd <repository_folder>
-    ```
-    Or download the files as a ZIP and extract them.
+1.  **Download Application Files:**
+    *   Download the main Python script (e.g., `gtlhelper.py`).
+    *   Create a folder named `icons` in the same directory as the script.
+    *   Place the required PNG icon files (see "Icon Setup" below) into this `icons` folder.
 
 2.  **Install Python Dependencies:**
-    Open a terminal or command prompt in the project folder and run:
-    ```bash
-    pip install -r requirements.txt
-    ```
-    (You will need to create a `requirements.txt` file. See below.)
+    *   Create a file named `requirements.txt` in the same directory as the script with the following content:
+        ```txt
+        customtkinter>=5.0.0
+        Pillow>=9.0.0
+        pytesseract>=0.3.8
+        gspread>=5.0.0
+        google-auth>=2.0.0
+        google-auth-oauthlib>=0.7.0 
+        # google-auth-httplib2 is usually a sub-dependency
+        ```
+    *   Open your terminal or command prompt, navigate to the application's directory, and run:
+        ```bash
+        pip install -r requirements.txt
+        ```
 
-3.  **Configure Tesseract Path (if needed):**
-    Open the Python script (e.g., `gtl_helper_app.py`). Near the top, find the `TESSERACT_CMD_PATH` variable.
-    *   **Windows Users:** If you installed Tesseract to a non-default location, update this path to point to your `tesseract.exe` (e.g., `r'C:\MyCustomPath\Tesseract-OCR\tesseract.exe'`). If Tesseract is correctly in your system PATH, the script might find it automatically.
-    *   **macOS/Linux Users:** This usually doesn't need changing if Tesseract was installed via package managers.
+3.  **Set Up Google OAuth 2.0 Credentials (for Google Sheets):**
+    This allows the application to securely access *your* Google Sheets on your behalf. You only need to do this setup once for the application on your Google Account.
 
-4.  **Set up Google Sheets API Credentials:**
-
-    a.  **Create a Service Account and Key:**
+    *   **a. Create/Select a Google Cloud Platform (GCP) Project:**
         1.  Go to the [Google Cloud Console](https://console.cloud.google.com/).
-        2.  Select your GCP project.
-        3.  Navigate to **"IAM & Admin" > "Service Accounts"**.
-        4.  Click **"+ CREATE SERVICE ACCOUNT"**.
-            *   Give it a name (e.g., "gtl-sheet-updater").
-            *   Click "CREATE AND CONTINUE".
-        5.  **Grant this service account access to project:**
-            *   Select a role: **"Editor"** is a simple option that grants necessary permissions for Sheets. For more restricted access, you could create a custom role with `drive.file` and `spreadsheets` permissions.
-            *   Click "CONTINUE".
-        6.  Skip "Grant users access to this service account" (optional) and click "DONE".
-        7.  Find the service account you just created in the list. Click on its email address.
-        8.  Go to the **"KEYS"** tab.
-        9.  Click **"ADD KEY" > "Create new key"**.
-        10. Choose **JSON** as the key type and click **"CREATE"**.
-        11. A JSON file will be downloaded. **Rename this file to `credentials.json`** and place it in the **same directory** as the Python script. **Treat this file like a password – keep it secure!**
+        2.  If you don't have a project, create one. Otherwise, select an existing project.
 
-    b.  **Get Your Google Sheet ID:**
-        1.  Create a new Google Sheet or open the one you want to use.
-        2.  Look at the URL in your browser's address bar. It will look something like this:
-            `https://docs.google.com/spreadsheets/d/THIS_IS_THE_SPREADSHEET_ID/edit#gid=0`
-        3.  Copy the long string of characters between `/d/` and `/edit`. This is your **Spreadsheet ID**.
-        4.  Open the Python script and find the `SPREADSHEET_ID` variable. Paste your copied ID there:
-            ```python
-            SPREADSHEET_ID = 'YOUR_COPIED_SPREADSHEET_ID_HERE'
-            ```
+    *   **b. Enable Necessary APIs:**
+        1.  In your GCP project, go to **"APIs & Services" > "Library"**.
+        2.  Search for and **Enable** the **"Google Sheets API"**.
+        3.  Search for and **Enable** the **"Google Drive API"** (often required by `gspread`).
 
-    c.  **Share the Google Sheet with the Service Account:**
-        1.  In the Google Sheet, click the **"Share"** button (usually top right).
-        2.  In the "Add people and groups" field, paste the **email address of the service account** you created (e.g., `gtl-sheet-updater@your-project-id.iam.gserviceaccount.com`). You can find this email on the Service Account details page in GCP.
-        3.  Ensure it has **"Editor"** permission for the sheet.
-        4.  Click "Send" (or "Share").
+    *   **c. Configure the OAuth Consent Screen:**
+        *(This is what you see when an app asks for permission to access your Google data)*
+        1.  Go to **"APIs & Services" > "OAuth consent screen"**.
+        2.  **User Type:** Choose **"External"**. Click **"CREATE"**.
+        3.  **App information:**
+            *   **App name:** Enter a name (e.g., "My GTL OCR Helper").
+            *   **User support email:** Select your email address.
+            *   **Developer contact information (Email addresses):** Enter your email address.
+            *   Click **"SAVE AND CONTINUE"**.
+        4.  **Scopes:**
+            *   Click **"ADD OR REMOVE SCOPES"**.
+            *   Find and select the **Google Sheets API** scope: `.../auth/spreadsheets` (Full access to all your spreadsheets).
+            *   Click **"UPDATE"**.
+            *   Click **"SAVE AND CONTINUE"**.
+        5.  **Test users:**
+            *   Click **"+ ADD USERS"**. Add your own Google email address(es) that you'll use with this app.
+            *   Click **"ADD"**, then **"SAVE AND CONTINUE"**.
+        6.  Review the summary and click **"BACK TO DASHBOARD"**.
+            *   The "Publishing status" will be "Testing". This is fine for personal use with your added test email(s).
 
-5.  **Configure Worksheet Name (Optional):**
-    If your target sheet within the Google Spreadsheet is not named "Sheet1", update the `WORKSHEET_NAME` variable in the script:
-    ```python
-    WORKSHEET_NAME = 'YourActualSheetName'
-    ```
+    *   **d. Create OAuth 2.0 Client ID for a Desktop App:**
+        1.  Go to **"APIs & Services" > "Credentials"**.
+        2.  Click **"+ CREATE CREDENTIALS"** > **"OAuth client ID"**.
+        3.  **Application type:** Choose **"Desktop app"**.
+        4.  **Name:** Give it a name (e.g., "GTL Helper Desktop Client").
+        5.  Click **"CREATE"**.
+        6.  A dialog will show your Client ID and Client Secret. Click **"DOWNLOAD JSON"**.
+        7.  The downloaded file will be named something like `client_secret_[...].json`.
+        8.  **Rename this file to exactly `client_secret_desktop.json`**.
+        9.  Place this `client_secret_desktop.json` file in the **same directory** as the Python script.
+
+4.  **Icon Setup (Recommended):**
+    *   Create an `icons` subfolder in the application directory.
+    *   Place the following PNG files (recommended size 20x20 to 32x32 pixels) inside the `icons` folder:
+        *   `camera_icon.png`
+        *   `clipboard_icon.png`
+        *   `save_icon.png`
+        *   `layout_icon.png` (for mini/full mode toggle)
+        *   `settings_icon.png` (for the settings panel toggle)
+        *   `link_icon.png` (for the "Set Sheet" button)
+    *   If icons are not found, text/emoji fallbacks will be used.
 
 ## Running the Application
 
-1.  Navigate to the project directory in your terminal/command prompt.
-2.  Run the script:
+1.  Ensure all setup steps are complete.
+2.  Open a terminal or command prompt.
+3.  Navigate to the directory containing the Python script (e.g., `gtlhelper.py`) and the `icons` folder.
+4.  Run the script:
     ```bash
-    python gtl_helper_app.py 
+    python gtlhelper.py
     ```
-    (Or whatever you named your main Python file).
 
-## Usage
+## First-Time Google Authentication
 
-1.  **Capture Region & Preview:**
-    *   Click "Capture Region & Preview".
-    *   The main app window will minimize.
-    *   A semi-transparent overlay will cover your screen. Click and drag to select the GTL listing line.
-    *   Release the mouse. The app window will reappear, and the OCR'd data will be shown in the preview area.
-2.  **Preview Clipboard:**
-    *   Copy an image of a GTL listing to your clipboard (e.g., using Windows: `Win+Shift+S`, then select the area).
-    *   Click "Preview Clipboard" in the app. The OCR'd data will be shown in the preview.
-3.  **Save Previewed:**
-    *   Once data is in the preview and looks correct, click "Save Previewed".
-    *   The structured data will be saved to Google Sheets and/or the local `gtl_listings.csv` file, depending on the checkbox settings.
-4.  **Settings:**
-    *   Use the checkboxes to enable/disable saving to Google Sheets or CSV.
-5.  **Toggle Layout:**
-    *   Switch the app's button layout between horizontal and vertical for convenient placement.
+*   On the first run (or if `token.json` is deleted/invalid), a message box will explain the upcoming Google permission request.
+*   Your web browser will open, asking you to log into your Google Account and grant the application permission to access your Google Sheets.
+*   Review the permissions and click **"Allow"**.
+*   You may see a warning that "Google hasn't verified this app." If you are using your own credentials or are a listed test user, you can proceed by clicking "Advanced" (if shown) and then "Go to [Your App Name] (unsafe)".
+*   Once authorized, a `token.json` file will be created in the script's directory. This stores your authorization for future sessions. **Do not share your `token.json` file.**
 
-## `requirements.txt` File
+## How to Use
 
-Create a file named `requirements.txt` in the same directory as your script with the following content:
-Pillow>=9.0.0
-pytesseract>=0.3.0
-gspread>=5.0.0
-google-auth>=2.0.0
-google-auth-oauthlib>=0.4.0
-google-auth-httplib2>=0.1.0
-Users can then install these with `pip install -r requirements.txt`. (Note: `google-auth-oauthlib` and `google-auth-httplib2` are often pulled in as dependencies of `gspread` or `google-auth` but it's good to list them for clarity if specific versions were relevant during development).
+The application window is always on top for easy access.
+
+1.  **Set Target Google Sheet (Important for Google Sheets Saving):**
+    *   Click the "⚙️ Settings" button to expand the settings panel.
+    *   Paste the full URL or just the ID of your target Google Sheet into the "Sheet URL/ID" field.
+    *   Click the "🔗 Set" button. The app will attempt to connect. The status bar will confirm success or failure.
+    *   This Sheet ID is saved locally in `app_settings.json` for future sessions.
+
+2.  **Capture Region & Preview (Recommended for Multi-Line GTL Data):**
+    *   Click the "📷 Capture" button.
+    *   The main app window will minimize. A semi-transparent overlay will cover your screen.
+    *   Click and drag to draw a rectangle around the GTL listing(s) you want to capture.
+    *   Release the mouse. The app window will reappear with the parsed data in the preview.
+
+3.  **Preview Clipboard (Good for Single Quick Snips):**
+    *   Copy an image of a GTL listing to your clipboard (e.g., on Windows: `Win+Shift+S`).
+    *   Click the "📋 Clipboard" button in the app. The preview will update.
+
+4.  **Review Preview:**
+    *   **Normal Mode:** Displays "Name: [Item] | Price: [Value] | Date: [dd/mm/yyyy]". For multiple items, shows a count and the first item's details.
+    *   **Mini Mode:** Shows a very compact summary (e.g., "Name..|Price (Count)").
+    *   Check the console output for full details of all parsed items if multiple were captured.
+    *   If incorrect, recapture or copy a new image and click the appropriate preview button again.
+
+5.  **Save Previewed Data:**
+    *   Once the previewed data is correct, click the green "💾 Save" button.
+    *   Data is saved to Google Sheets and/or `gtl_listings.csv` based on your selections.
+    *   The "Save" button is disabled if there's no valid data in the preview.
+
+6.  **Settings Panel:**
+    *   **Save to Sheets/CSV:** Toggle checkboxes to control save destinations. "Save to Sheets" is only enabled if a valid Google Sheet is loaded.
+    *   **Mini Mode/Full Mode Button:** Switches the UI between the detailed normal layout and the compact icon-based mini layout.
 
 ## Troubleshooting
 
-*   **Tesseract Not Found:** Ensure Tesseract is installed and the `TESSERACT_CMD_PATH` in the script is correct or Tesseract is in your system's PATH.
-*   **Google Sheets Errors:**
-    *   Double-check your `SPREADSHEET_ID`.
-    *   Ensure `credentials.json` is correctly named and in the same folder.
-    *   Verify the service account email has "Editor" access to your Google Sheet.
-    *   Make sure the Google Sheets API is enabled in your GCP project.
-*   **OCR Accuracy:**
-    *   Ensure your screen captures are clear and tightly cropped around the relevant text.
-    *   Experiment with the `scale_factor` and `threshold` values in the `preprocess_image` function if OCR results are consistently poor.
-*   **NameError: name 'KNOWN_INPUT_TYPES' is not defined:** Ensure the `KNOWN_INPUT_TYPES = ["GTL", "GM"]` list is defined globally in the script.
-
-
-
-4. Set up Google OAuth 2.0 Credentials (For User Authentication)
-This application uses OAuth 2.0 to allow it to access your Google Sheets on your behalf. This means you will log in with your own Google account the first time you run the app, and the app will only access the sheets you intend for it to use. You will need to create OAuth 2.0 credentials within your own Google Cloud Project.
-a. Create or Select a Google Cloud Platform (GCP) Project:
-Go to the Google Cloud Console.
-If you don't have a project, create a new one. If you do, select the project you want to use.
-b. Enable Necessary APIs:
-In your selected GCP project, navigate to "APIs & Services" > "Library".
-Search for and enable the "Google Sheets API".
-Search for and enable the "Google Drive API" (this is often required by the gspread library for discovering and accessing spreadsheets).
-c. Configure the OAuth Consent Screen:
-This screen is what users will see when asked to grant your application access.
-Navigate to "APIs & Services" > "OAuth consent screen".
-User Type: Choose "External" if you want anyone with a Google account to be able to use it (once your app is verified by Google if needed, or if you add them as test users). Choose "Internal" if this is only for users within your Google Workspace organization. For personal use or sharing with friends, "External" is common.
-Click "CREATE".
-App information:
-App name: Enter a name for the application, e.g., "My GTL Helper" or "GTL OCR Tool".
-User support email: Select your email address.
-App logo: Optional.
-Developer contact information: Enter your email address.
-Click "SAVE AND CONTINUE".
-Scopes:
-Click "ADD OR REMOVE SCOPES".
-Search for or manually find the Google Sheets API scope: https://www.googleapis.com/auth/spreadsheets (allows reading and writing to sheets).
-Select it and click "UPDATE".
-Click "SAVE AND CONTINUE".
-Test users (Important for Initial Use):
-While your app is in "Testing" publishing status (which it will be initially), only users added here can authorize the app.
-Click "+ ADD USERS" and add your own Google email address(es) that you will use to test the application. If you plan to share with specific friends for testing, add their Google emails too.
-Click "SAVE AND CONTINUE".
-Review the summary and click "BACK TO DASHBOARD".
-For now, you can leave the "Publishing status" as "Testing". If you later want anyone to use it without being on the test user list, you'd click "PUBLISH APP", which might trigger a Google verification process depending on the scopes and app usage.
-d. Create OAuth 2.0 Client ID Credentials for a Desktop App:
-Navigate to "APIs & Services" > "Credentials".
-Click "+ CREATE CREDENTIALS" at the top.
-Select "OAuth client ID".
-Application type: Choose "Desktop app".
-Name: Give it a name (e.g., "GTL Helper Desktop Client").
-Click "CREATE".
-A dialog box will appear showing your "Client ID" and "Client Secret". You don't need to copy these directly from here. Click "DOWNLOAD JSON" (or there might be a download icon).
-The downloaded file will likely be named something like client_secret_[...long_string...].json.
-Rename this downloaded file to exactly client_secret_desktop.json.
-Place this client_secret_desktop.json file in the same directory as the Python script (e.g., gtlhelper.py). This file allows the application to identify itself to Google during the OAuth flow.
-e. Get Your Target Google Sheet ID (User Choice):
-The application will now allow you to set the target Google Sheet from within its settings.
-When you run the app, after authenticating, go to the app's settings (expand "⚙️ Settings").
-You will see a field for "Sheet URL/ID".
-Create a new Google Sheet or open the one you want the app to write data to.
-From the Google Sheet's URL in your browser (e.g., https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit), copy the SPREADSHEET_ID.
-Paste this ID (or the full URL) into the entry field in the app and click "Set Sheet".
-The app will save this ID for future sessions in a local app_settings.json file.
-Important First Run:
-The first time you run the application after setting up client_secret_desktop.json, your web browser will open.
-You will be asked to log into your Google account (if not already logged in) and then to grant the "GTL Helper" (or whatever you named it on the consent screen) permission to access your Google Sheets.
-After you grant permission, you'll be redirected, and a token.json file will be created in the script's directory. This file stores your authorization so you don't have to log in via the browser every time. Do not share your token.json file.
+*   **`Tesseract Error` / No OCR:**
+    *   Ensure Tesseract OCR is installed correctly and accessible via your system's PATH, or that `TESSERACT_CMD_PATH` in the script is accurate.
+    *   Verify English language data for Tesseract is installed.
+*   **`Icon load err ...` / Missing Icons:**
+    *   Confirm the `icons` subfolder exists in the same directory as the script.
+    *   Ensure all PNG icon files (e.g., `camera_icon.png`) are present in the `icons` folder and correctly named as per `icon_map` in the script.
+*   **Google Sheets Authentication or Save Failures:**
+    *   **`client_secret_desktop.json` missing:** Ensure this file (downloaded from GCP OAuth credentials setup) is in the script's directory.
+    *   **`token.json` issues:** If you encounter persistent auth problems or scope errors ("invalid_scope"), try deleting `token.json` and re-authenticating through the browser flow.
+    *   **API Errors (`PERMISSION_DENIED`, `NOT_FOUND`):**
+        *   Double-check the **Sheet ID/URL** you entered in the app's settings.
+        *   Ensure the Google account you authenticated with has **Editor access** to that specific Google Sheet.
+        *   Verify that both **Google Sheets API** and **Google Drive API** are enabled in your GCP project.
+        *   Check your internet connection.
+*   **OCR Inaccuracy (`StructError: ...`, wrong text):**
+    *   **Capture Quality:** Clear, tightly cropped captures of the GTL text work best. Avoid excessive background.
+    *   **Game UI:** If the GTL interface in Pokemmo changes significantly, the OCR parsing logic (`structure_listing_data` function) might need updates. The current parser expects a "Price -> Name -> (Optional GTL/GM Type) -> Date" format from the OCR'd line.
+    *   **Image Preprocessing:** You can experiment with `scale_factor` and `threshold` in the `preprocess_image` function if OCR is consistently poor. Uncomment the line to save `preprocessed_debug_image.png` to see what Tesseract is working with.
