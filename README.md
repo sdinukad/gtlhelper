@@ -117,17 +117,6 @@ Before you begin, ensure you have the following installed on your system:
         8.  **Rename this file to exactly `client_secret_desktop.json`**.
         9.  Place this `client_secret_desktop.json` file in the **same directory** as the Python script.
 
-4.  **Icon Setup (Recommended):**
-    *   Create an `icons` subfolder in the application directory.
-    *   Place the following PNG files (recommended size 20x20 to 32x32 pixels) inside the `icons` folder:
-        *   `camera_icon.png`
-        *   `clipboard_icon.png`
-        *   `save_icon.png`
-        *   `layout_icon.png` (for mini/full mode toggle)
-        *   `settings_icon.png` (for the settings panel toggle)
-        *   `link_icon.png` (for the "Set Sheet" button)
-    *   If icons are not found, text/emoji fallbacks will be used.
-
 ## Running the Application
 
 1.  Ensure all setup steps are complete.
