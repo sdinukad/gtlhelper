@@ -5,10 +5,10 @@ A modern, user-friendly desktop application designed to streamline tracking your
 <details>
 <summary>Screenshots</summary>
    
-   Fig 1: GTL Helper - Normal Mode Interface: 
+   Fig 1: GTL Helper - Normal Mode Interface:<br>
    ![GTL Helper Screenshot - Normal Mode](placeholder_normal_mode.png) 
    
-   Fig 2: GTL Helper - Compact Mini Mode: 
+   Fig 2: GTL Helper - Compact Mini Mode:<br>
    ![GTL Helper Screenshot - Mini Mode](placeholder_mini_mode.png) 
 
    
