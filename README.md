@@ -73,7 +73,8 @@ Before you begin, ensure you have the following installed on your system:
         ```bash
         pip install -r requirements.txt
         ```
-
+The following steps for getting your own credentials is included for redistribution purposes. You can use my app token for this app by contacting me privately.
+<details>
 3.  **Set Up Google OAuth 2.0 Credentials (for Google Sheets):**
     This allows the application to securely access *your* Google Sheets on your behalf. You only need to do this setup once for the application on your Google Account.
 
@@ -116,7 +117,7 @@ Before you begin, ensure you have the following installed on your system:
         7.  The downloaded file will be named something like `client_secret_[...].json`.
         8.  **Rename this file to exactly `client_secret_desktop.json`**.
         9.  Place this `client_secret_desktop.json` file in the **same directory** as the Python script.
-
+</details>
 ## Running the Application
 
 1.  Ensure all setup steps are complete.
