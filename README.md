@@ -2,7 +2,7 @@
 
 App for tracking your Global Trade Link (GTL) activities in Pokemmo. 
 Capture single or multiple GTL listings using an in-app region selection tool or from your clipboard, let Tesseract OCR extract the details, and save the structured data (Item Name, Price, Date) directly to your personal Google Sheet and/or a local CSV file.
-The main purpose is to easily record down you have bought to save time on typing it out.
+The main purpose is to easily record down you have bought using the trade log in order to save time on typing it out.
 
 
 <details open>
