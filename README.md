@@ -139,7 +139,7 @@ Before you begin, ensure you have the following installed on your system:
 *   On the first run (or if `token.json` is deleted/invalid), a message box will explain the upcoming Google permission request.
 *   Your web browser will open, asking you to log into your Google Account and grant the application permission to access your Google Sheets.
 *   Review the permissions and click **"Allow"**.
-*   You may see a warning that "Google hasn't verified this app." If you are using your own credentials or are a listed test user, you can proceed by clicking "Advanced" (if shown) and then "Go to [Your App Name] (unsafe)".
+*   You may see a warning that "Google hasn't verified this app." You can proceed by clicking "Advanced" (if shown) and then "Go to [GTLHelper] (unsafe)". I am not going through the verification process and the app simply appends to a google sheet that you get to select so it is perfectly safe.
 *   Once authorized, a `token.json` file will be created in the script's directory. This stores your authorization for future sessions. **Do not share your `token.json` file.**
 
 ## How to Use
