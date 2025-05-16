@@ -66,8 +66,8 @@ Before you begin, ensure you have the following installed on your system:
 ## Setup Instructions
 
 1.  **Download Application Files:**
-    *   Download the main Python script (e.g., `gtlhelper.py`).
-    *   Download the `icons` in to the same directory as the script
+    *   Download the main Python script (`gtlhelper.py`).
+    *   Download the `icons` folder in to the same directory as the script
 
 2.  **Install Python Dependencies:**
     *   Create a file named `requirements.txt` in the same directory as the script with the following content:
@@ -80,7 +80,7 @@ Before you begin, ensure you have the following installed on your system:
         google-auth-oauthlib>=0.7.0 
         # google-auth-httplib2 is usually a sub-dependency
         ```
-    *   Open your terminal or command prompt, navigate to the application's directory, and run:
+    *   Open your terminal or command prompt, navigate to the script's directory, and run:
         ```bash
         pip install -r requirements.txt
         ```
@@ -136,7 +136,7 @@ Before you begin, ensure you have the following installed on your system:
 
 1.  Ensure all setup steps are complete.
 2.  Open a terminal or command prompt.
-3.  Navigate to the directory containing the Python script (e.g., `gtlhelper.py`) and the `icons` folder.
+3.  Navigate to the directory containing the Python script (`gtlhelper.py`) and the `icons` folder.
 4.  Run the script:
     ```bash
     python gtlhelper.py
