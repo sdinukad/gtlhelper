@@ -23,27 +23,19 @@ The main purpose is to easily record what you buy using the trade log in order t
 
 ## Key Features
 
-*   **Flexible Data Capture:**
+*   
     *   **In-App Region Selection:** Capture any part of your screen containing GTL listings (supports single or multiple lines).
     *   **Clipboard Processing:** Instantly process images of GTL listings copied to your clipboard (e.g., via `Win+Shift+S`).
-*   **Accurate OCR & Parsing:**
     *   Powered by Tesseract OCR for text extraction.
     *   Intelligent parsing to structure OCR'd text into `Item Name`, `Price`, and `Date` (formatted as `dd/mm/yyyy`).
     *   Designed to handle the common "Price -> Name -> (Optional Type) -> Date" GTL format.
     *   Automatically processes both single and multiple listings from a region capture.
     *   Attempts to filter out common headers or irrelevant lines.
-*   **Versatile Save Options:**
     *   **Google Sheets Integration:** Securely save data to *your own* Google Sheet using OAuth 2.0 user authentication.
     *   **Local CSV Export:** Save listings to a `gtl_listings.csv` file on your computer.
     *   Both save options are toggleable via checkboxes in the settings.
-*   **Modern & Customizable UI:**
-    *   Built with `CustomTkinter` for a sleek, modern dark theme.
     *   **Mini Mode:** Switch to an ultra-compact, icon-driven interface for minimal screen real estate usage.
-    *   **Collapsible Settings Panel:** Access save preferences and sheet configuration easily.
     *   Always-on-top window functionality.
-    *   Clear visual preview of parsed data before saving.
-    *   Informative status bar for operational feedback.
-*   **Efficient & Responsive:**
     *   Save operations to Google Sheets and CSV are performed in background threads to keep the UI snappy.
     *   Optimized OCR calls for single-line (clipboard) vs. multi-line (region) captures.
 
