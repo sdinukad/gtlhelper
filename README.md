@@ -76,7 +76,7 @@ Before you begin, ensure you have the following installed on your system:
         ```bash
         pip install -r requirements.txt
         ```
-## The mext set of steps were added so people can't abuse my api usage. If you know me personally/online, message me to get this file (`client_secret_desktop.json`) instead of going through the annoying process.
+## The next set of steps were added so people can't abuse my api usage. If you know me personally/online, message me to get this file (`client_secret_desktop.json`) instead of going through the annoying process.
 <details>
    
 3.  **Set Up Google OAuth 2.0 Credentials (for Google Sheets):**
